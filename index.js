@@ -33,6 +33,21 @@ app.post("/register", async (req, res) => {
   res.redirect("/");
 });
 
+app.get("/login", (req, res) => {
+  res.render("login");
+});
+
+app.post("/login", async (req, res) => {
+  const { username, password } = req.body;
+  const user = await User.findOne({ username });
+  const validPassword = await bcrypt.compare(password, user.password);
+  if (validPassword) {
+    res.send("Welcome");
+  } else {
+    res.send("Invalid username or password");
+  }
+});
+
 app.get("/secret", (req, res) => {
   res.send("You cannot see this unless you are logged in.");
 });
